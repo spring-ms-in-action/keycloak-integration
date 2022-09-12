@@ -1,0 +1,43 @@
+server:
+  port: 4040
+
+logging:
+  level:
+    root: INFO
+    org.keycloak: TRACE
+
+keycloak:
+  realm: itsol
+  auth-server-url: http://localhost:2020
+  ssl-required: external
+  resource: login-app
+  verify-token-audience: false
+  credentials:
+    secret: IdhYEpPzrCQh1EGoEGE6y6Ptry9m5eju
+  use-resource-role-mappings: true
+  security-constraints:
+    - auth-roles:
+        - "*"
+      security-collections:
+        - name:
+          patterns:
+            - "/*"
+  policy-enforcer-config:
+    enforcement-mode: ENFORCING
+    lazy-load-paths: true
+    http-method-as-scope: true
+    paths:
+      - path: "/api/v1/group"
+        methods:
+          - method: GET
+            scopes:
+              - group.view
+          - method: POST
+            scopes:
+              - group.create
+          - method: PUT
+            scopes:
+              - group.update
+          - method: DELETE
+            scopes:
+              - group.delete
