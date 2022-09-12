@@ -62,3 +62,43 @@ Truy cập vào link `Administration Console` [http://localhost:2020](http://loc
    - Chọn `[PO] Quản lý phòng ban`
    - Click `Save`
 
+## Cấu hình spring project
+Chú ý các tham số sau tại file `application.yml`
+
+```yaml
+keycloak:
+  realm: itsol
+  auth-server-url: http://localhost:2020
+  ssl-required: external
+  resource: login-app
+  verify-token-audience: false
+  credentials:
+    secret: IdhYEpPzrCQh1EGoEGE6y6Ptry9m5eju
+  use-resource-role-mappings: true  # sử dụng user resource role thay vì real role
+  security-constraints: 
+    - auth-roles:
+        - "*"
+      security-collections:
+        - name:
+          patterns:
+            - "/*"
+  policy-enforcer-config:
+    enforcement-mode: ENFORCING
+    lazy-load-paths: true
+    http-method-as-scope: true
+    paths:
+      - path: "/api/v1/group"
+        methods:
+          - method: GET
+            scopes:
+              - group.view
+          - method: POST
+            scopes:
+              - group.create
+          - method: PUT
+            scopes:
+              - group.update
+          - method: DELETE
+            scopes:
+              - group.delete
+```
