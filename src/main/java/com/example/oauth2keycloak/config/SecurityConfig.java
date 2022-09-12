@@ -1,17 +1,8 @@
 package com.example.oauth2keycloak.config;
 
-import org.keycloak.adapters.KeycloakConfigResolver;
-import org.keycloak.adapters.springboot.KeycloakSpringBootConfigResolver;
 import org.keycloak.adapters.springsecurity.KeycloakConfiguration;
 import org.keycloak.adapters.springsecurity.config.KeycloakWebSecurityConfigurerAdapter;
-import org.keycloak.adapters.springsecurity.filter.KeycloakAuthenticatedActionsFilter;
-import org.keycloak.adapters.springsecurity.filter.KeycloakAuthenticationProcessingFilter;
-import org.keycloak.adapters.springsecurity.filter.KeycloakPreAuthActionsFilter;
-import org.keycloak.adapters.springsecurity.filter.KeycloakSecurityContextRequestFilter;
-import org.keycloak.adapters.springsecurity.management.HttpSessionManager;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
-import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -26,9 +17,9 @@ public class SecurityConfig extends KeycloakWebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
-                .csrf().disable()
+                .csrf().disable()   // bắt buộc
                 .authorizeRequests()
-                .anyRequest().permitAll();
+                .anyRequest().permitAll();  // bắt buộc để lại bỏ spring security
     }
 
     /**

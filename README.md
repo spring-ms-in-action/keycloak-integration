@@ -102,3 +102,14 @@ keycloak:
             scopes:
               - group.delete
 ```
+
+- Tại file `SecurityConfig.java` chú ý method sau:
+```java
+@Override
+    protected void configure(HttpSecurity http) throws Exception {
+        http
+                .csrf().disable()   // bắt buộc
+                .authorizeRequests()
+                .anyRequest().permitAll(); // bắt buộc để loại bỏ spring security
+    }
+```
