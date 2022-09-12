@@ -1,0 +1,62 @@
+version: '3.9'
+services:
+
+  # postgresql Database
+  postgres:
+    image: postgres:14.4
+    restart: always
+    container_name: postgres
+    environment:
+      POSTGRES_PASSWORD: Abc@123456
+    volumes:
+      - type: volume
+        source: postgres-data
+        target: /var/lib/postgresql/data
+    networks:
+      - itsol-net
+    ports:
+      - "5432:5432"
+    deploy:
+      resources:
+        limits:
+          memory: 2048M
+        reservations:
+          memory: 500M
+
+  # keycloak
+  keycloak:
+    image: quay.io/keycloak/keycloak:latest
+    restart: always
+    container_name: keycloak
+    environment:
+      KC_DB: postgres
+      KC_DB_URL: jdbc:postgresql://postgres:5432/postgres
+      KC_DB_USERNAME: postgres
+      KC_DB_PASSWORD: Abc@123456
+      KEYCLOAK_ADMIN: admin
+      KEYCLOAK_ADMIN_PASSWORD: admin
+    ports:
+      - "2020:8080"
+      - "2443:2443"
+    networks:
+      - itsol-net
+    depends_on:
+      - "postgres"
+    deploy:
+      resources:
+        limits:
+          memory: 512M
+        reservations:
+          memory: 512M
+    entrypoint: [ "/opt/keycloak/bin/kc.sh", "start-dev --auto-build --log-level=info" ]
+
+volumes:
+  postgres-data:
+    driver: local
+
+networks:
+  itsol-net:
+    name: itsol-net
+    driver: bridge
+
+
